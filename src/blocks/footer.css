@@ -1,0 +1,14 @@
+/* Footer */
+.footer__container {
+    max-width: 880px;
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+}
+
+.footer__copyright {
+    color: #545454;
+    font-family: 'inter';
+    font-size: 16px;
+    text-align: start;
+}

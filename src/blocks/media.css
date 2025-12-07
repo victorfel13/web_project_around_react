@@ -1,0 +1,137 @@
+/* MEDIA QUERIES */
+@media (min-width: 1280px) {
+    body {
+        padding: 0 20px;
+        max-width: 1280px;
+        margin: 0 auto;
+    }
+
+    .grid {
+        grid-template-columns: repeat(3, 1fr);
+        max-width: 880px;
+        margin: 70px auto;
+    }
+
+    .header__logo,
+    .footer__container {
+        max-width: 880px;
+        margin: 0 auto;
+    }
+
+    .image-popup__close {
+        top: -40px;
+        right: -40px;
+        font-size: 60px;
+    }
+}
+
+@media (max-width: 1279px) and (min-width: 768px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+        margin: 60px auto;
+    }
+
+    .profile {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .profile__info {
+        margin-right: 0;
+        text-align: center;
+    }
+
+    .image-popup__close {
+        top: -35px;
+        right: -25px;
+        font-size: 50px;
+    }
+}
+
+@media (max-width: 767px) {
+    .header {
+        margin: 30px auto;
+    }
+
+    .header__logo {
+        margin: auto;
+    }
+
+    .header__logo-image {
+        width: 126px;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+        margin: 50px auto;
+    }
+
+    .profile {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+
+    .profile__info {
+        margin: auto;
+        text-align: center;
+    }
+
+    .profile__name {
+        font-size: 22px;
+    }
+
+    .profile__job {
+        font-size: 14px;
+        align-items: center;
+    }
+
+    .popup__form {
+        width: 240px;
+        height: 322px;
+        padding: 20px;
+        max-width: unset;
+    }
+
+    .popup__title {
+        font-size: 24px;
+    }
+
+    .popup__close-button {
+        position: absolute;
+        top: -201px;
+        right: 10px;
+        background: transparent;
+        border: none;
+        font-size: 40px;
+        font-weight: 100;
+        color: white;
+        cursor: pointer;
+        line-height: 1;
+        z-index: 1002;
+    }
+
+    .popup__close-button:hover {
+        opacity: 0.6;
+    }
+
+    .image-popup__close {
+        top: -25px;
+        right: -15px;
+        font-size: 40px;
+    }
+
+    .image-popup__caption {
+        font-size: 14px;
+        padding: 0 10px;
+    }
+
+    .image-popup__image {
+        max-height: 60vh;
+    }
+
+        .image-popup .image-popup__close {
+            top: -35px;
+            right: -15px;
+            font-size: 40px;     }
+}

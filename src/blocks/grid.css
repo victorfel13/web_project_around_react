@@ -1,0 +1,108 @@
+/* Grid de tarjetas */
+.cards__list {
+   
+}
+
+.cards__list{
+    width: 100%;
+        max-width: 880px;
+        margin: 70px auto;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+
+        
+}
+.grid__element {
+    background-color: white;
+    max-width: 282px;
+    max-height: 361px;
+    border-radius: 5%;
+}
+
+.grid__image {
+    width: 100%;
+    height: 282px;
+    object-fit: cover;
+    border-top-left-radius: 5%;
+    border-top-right-radius: 5%;
+}
+
+.grid__description {
+    max-width: 246px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+.grid__place {
+    font-family: 'inter';
+    font-weight: 700;
+    text-align: start;
+    color: black;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.grid__icon {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+}
+
+.grid__icon:hover {
+    opacity: 0.6;
+}
+
+/* Posición y estilo del contenedor de iconos */
+.grid__icons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+    position: relative;
+}
+
+/* Icono de corazón */
+.icon_heart {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+}
+
+.grid__element {
+    position: relative;
+    overflow: hidden;
+}
+
+.grid__delete-container {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 1;
+}
+
+.grid__delete-icon {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+.grid__delete-icon:hover {
+    opacity: 1;
+}
+.grid__like-icon {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+.grid__like-icon:hover {
+    opacity: 1;
+}
