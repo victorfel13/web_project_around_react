@@ -54,9 +54,9 @@ export default function Main() {
     children: <NewCard onClose={handleClosePopup} />,
   };
 
-  // -----------------------------
-  //  CARD ACTIONS
-  // -----------------------------
+ 
+  //  CARD 
+
 
   function handleCardLike(card) {
     setCards((prevCards) =>
@@ -84,9 +84,9 @@ export default function Main() {
     });
   }
 
-  // -----------------------------
-  //  RENDER
-  // -----------------------------
+  
+  //  
+  
 
   return (
     <>
