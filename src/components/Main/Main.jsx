@@ -1,88 +1,65 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import CurrentUserContext from "../../contexts/CurrentUserContext";
-import api from "../utils/api";
 import Card from "../Card/Card";
 import Popup from "./Popup/Popup";
-
 
 import EditProfile from "../Form/EditProfile/EditProfile";
 import EditAvatar from "../Form/EditAvatar/EditAvatar";
 import NewCard from "../Form/NewCard/NewCard";
 
-export default function Main() {
+export default function Main({ cards, onCardLike, onCardDelete, onAddPlace }) {
   const { currentUser } = useContext(CurrentUserContext);
-  const [cards, setCards] = useState([]);
   const [popup, setPopup] = useState(null);
-
-  useEffect(() => {
-    api.getInitialCards()
-      .then(setCards)
-      .catch(console.error);
-  }, []);
-
-  function handleOpenPopup(popupData) {
-    setPopup(popupData);
-  }
-
-  function handleClosePopup() {
-    setPopup(null);
-  }
 
   const editProfilePopup = {
     title: "Editar perfil",
-    children: <EditProfile onClose={handleClosePopup} />,
+    children: <EditProfile onClose={() => setPopup(null)} />,
   };
 
   const editAvatarPopup = {
     title: "Editar avatar",
-    children: <EditAvatar onClose={handleClosePopup} />,
+    children: <EditAvatar onClose={() => setPopup(null)} />,
   };
 
   const newCardPopup = {
     title: "Nuevo lugar",
-    children: <NewCard onClose={handleClosePopup} />,
+    children: <NewCard onClose={() => setPopup(null)} onAddPlace={onAddPlace} />,
   };
 
-  async function handleCardLike(card) {
-    const isLiked = card.likes.some((u) => u._id === currentUser._id);
-    try {
-      const newCard = await api.changeLikeCardStatus(card._id, !isLiked);
-      setCards((state) => state.map((c) => (c._id === card._id ? newCard : c)));
-    } catch (error) {
-      console.error(error);
-    }
-  }
+  const handleOpenPopup = (popupData) => setPopup(popupData);
+  const handleClosePopup = () => setPopup(null);
 
-  function handleCardClick(card) {
+  const handleCardClick = (card) => {
     setPopup({
       title: "",
       children: (
         <img
           src={card.link}
           alt={card.name}
-          style={{ width: "90vw", maxHeight: "80vh", objectFit: "cover", borderRadius: "8px" }}
+          style={{
+            width: "90vw",
+            maxHeight: "80vh",
+            objectFit: "cover",
+            borderRadius: "8px",
+          }}
         />
       ),
     });
-  }
+  };
 
-  async function handleCardDelete(card) {
-    try {
-      await api.deleteCard(card._id);
-      setCards((state) => state.filter((c) => c._id !== card._id));
-    } catch (error) {
-      console.error(error);
-    }
-  }
+  // Evitar renderizar si no hay usuario o tarjetas
+  if (!currentUser._id) return <p>Cargando usuario...</p>;
 
   return (
     <>
+      {/* Perfil y botones */}
       <section className="profile">
         <div className="avatar-container">
           <img
             src={currentUser.avatar || "/images/image.jpg"}
             alt={`Foto de perfil de ${currentUser.name || "Usuario"}`}
             className="avatar"
+            onClick={() => handleOpenPopup(editAvatarPopup)}
           />
           <button
             className="avatar-edit-btn"
@@ -109,21 +86,26 @@ export default function Main() {
           <img src="/images/AddButton.png" alt="Agregar tarjeta" />
         </button>
       </section>
+
       <ul className="cards__list">
         {cards.map((card) => {
-          const isLiked = card.likes.some((u) => u._id === currentUser._id);
+          // Proteger contra likes undefined
+          const likesArray = Array.isArray(card.likes) ? card.likes : [];
+          const isLiked = likesArray.some((u) => u._id === currentUser._id);
+
           return (
             <Card
               key={card._id}
               card={card}
               isLiked={isLiked}
               onCardClick={() => handleCardClick(card)}
-              onCardLike={() => handleCardLike(card)}
-              onCardDelete={() => handleCardDelete(card)}
+              onCardLike={() => onCardLike(card)}
+              onCardDelete={() => onCardDelete(card)}
             />
           );
         })}
       </ul>
+
       {popup && <Popup title={popup.title} onClose={handleClosePopup}>{popup.children}</Popup>}
     </>
   );

@@ -1,35 +1,23 @@
-import { useState, useContext } from "react";
-import CurrentUserContext from "../../../contexts/CurrentUserContext";
-import api from "../../utils/api";
+import { useRef } from "react";
 
-export default function NewCard({ onClose }) {
-  const [name, setName] = useState("");
-  const [link, setLink] = useState("");
+export default function NewCard({ onClose, onAddPlace }) {
+  const nameRef = useRef();
+  const linkRef = useRef();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    api.addCard({ name, link })
-      .then(() => onClose())
-      .catch(console.error);
+    onAddPlace({
+      name: nameRef.current.value,
+      link: linkRef.current.value,
+    });
+    onClose();
   };
 
   return (
-    <form className="popup__form" noValidate onSubmit={handleSubmit}>
-      <input
-        className="popup__input"
-        placeholder="Nombre del lugar"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        required
-      />
-      <input
-        className="popup__input"
-        placeholder="URL de la imagen"
-        value={link}
-        onChange={(e) => setLink(e.target.value)}
-        required
-      />
-      <button type="submit" className="button popup__button">Agregar</button>
+    <form className="popup__form" onSubmit={handleSubmit} noValidate>
+      <input type="text" placeholder="Nombre" className="popup__input" ref={nameRef} required />
+      <input type="url" placeholder="URL de la imagen" className="popup__input" ref={linkRef} required />
+      <button type="submit" className="popup__save-button enabled">Guardar</button>
     </form>
   );
 }

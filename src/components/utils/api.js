@@ -59,9 +59,9 @@ class Api {
 }
 
 const api = new Api({
-  baseUrl: "https://around.nomoreparties.co/v1/web_es_XX",
+  baseUrl: "https://around-api.es.tripleten-services.com/v1",
   headers: {
-    authorization: "TU_TOKEN_AQUI",
+    authorization: "1103e885-c697-49d5-9c66-b98b72c26309",
     "Content-Type": "application/json",
   },
 });
