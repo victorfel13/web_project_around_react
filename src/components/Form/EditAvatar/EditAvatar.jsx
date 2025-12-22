@@ -1,17 +1,24 @@
-import { useState, useContext } from "react";
+import { useRef, useContext, useEffect } from "react";
 import CurrentUserContext from "../../../contexts/CurrentUserContext";
 
 export default function EditAvatar({ onClose }) {
   const { currentUser, handleUpdateAvatar } = useContext(CurrentUserContext);
-  const [avatar, setAvatar] = useState(currentUser.avatar || "");
+  const avatarRef = useRef();
 
-  const handleChange = (e) => setAvatar(e.target.value);
+  // Cada vez que se abre el popup, colocamos el valor actual del avatar
+  useEffect(() => {
+    if (avatarRef.current) {
+      avatarRef.current.value = currentUser.avatar || "";
+    }
+  }, [currentUser, avatarRef]);
 
-  const handleSubmit = (e) => {
+  function handleSubmit(e) {
     e.preventDefault();
-    handleUpdateAvatar({ avatar });
+    handleUpdateAvatar({
+      avatar: avatarRef.current.value,
+    });
     onClose();
-  };
+  }
 
   return (
     <form className="popup__form" noValidate onSubmit={handleSubmit}>
@@ -19,11 +26,12 @@ export default function EditAvatar({ onClose }) {
         type="url"
         className="popup__input"
         placeholder="URL del avatar"
-        value={avatar}
-        onChange={handleChange}
+        ref={avatarRef}
         required
       />
-      <button type="submit" className="button popup__button">Guardar</button>
+      <button type="submit" className="button popup__button">
+        Guardar
+      </button>
     </form>
   );
 }
