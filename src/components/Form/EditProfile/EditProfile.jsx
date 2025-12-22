@@ -1,39 +1,41 @@
-// src/components/Form/EditProfile/EditProfile.jsx
-import "../../../blocks/popup.css";
+import { useState, useContext } from "react";
+import CurrentUserContext from "../../../contexts/CurrentUserContext";
 
+export default function EditProfile({ onClose }) {
+  const { currentUser, handleUpdateUser } = useContext(CurrentUserContext);
+  const [name, setName] = useState(currentUser.name || "");
+  const [description, setDescription] = useState(currentUser.about || "");
 
+  const handleNameChange = (e) => setName(e.target.value);
+  const handleDescriptionChange = (e) => setDescription(e.target.value);
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handleUpdateUser({ name, about: description });
+    onClose();
+  };
 
-export default function EditProfile() {
   return (
-    <form className="popup__form" name="profile-form" noValidate>
-      <h2 className="popup__title">Editar perfil</h2>
-
-      <label htmlFor="name" className="popup__label"></label>
-      <input
-        type="text"
-        id="name"
-        name="name"
-        placeholder="Nombre"
-        className="popup__input"
-        required
-      />
-      <span className="popup__input-error" id="name-error"></span>
-
-      <label htmlFor="about" className="popup__label"></label>
-      <input
-        type="text"
-        id="about"
-        name="about"
-        placeholder="Sobre mí"
-        className="popup__input"
-        required
-      />
-      <span className="popup__input-error" id="about-error"></span>
-
-      <button type="submit" className="popup__save-button">
-        Guardar
-      </button>
+    <form className="popup__form" noValidate onSubmit={handleSubmit}>
+      <label className="popup__label">
+        <input
+          className="popup__input popup__input_type_name"
+          placeholder="Nombre"
+          value={name}
+          onChange={handleNameChange}
+          required
+        />
+      </label>
+      <label className="popup__label">
+        <input
+          className="popup__input popup__input_type_description"
+          placeholder="Acerca de mí"
+          value={description}
+          onChange={handleDescriptionChange}
+          required
+        />
+      </label>
+      <button className="button popup__button" type="submit">Guardar</button>
     </form>
   );
 }

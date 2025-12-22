@@ -1,39 +1,35 @@
-export default function NewCard() {
-  return (
-    <form
-      className="popup__form"
-      name="card-form"
-      id="new-card-form"
-      noValidate
-    >
-      <label className="popup__label">
-        <input
-          className="popup__input"
-          id="card-name"
-          maxLength="30"
-          minLength="1"
-          name="card-name"
-          placeholder="Title"
-          required
-          type="text"
-        />
-        <span className="popup__error" id="card-name-error"></span>
-      </label>
-      <label className="popup__label">
-        <input
-          className="popup__input popup__input_type_url"
-          id="card-link"
-          name="link"
-          placeholder="Image link"
-          required
-          type="url"
-        />
-        <span className="popup__input-error" id="card-link-error"></span>
-      </label>
+import { useState, useContext } from "react";
+import CurrentUserContext from "../../../contexts/CurrentUserContext";
+import api from "../../utils/api";
 
-      <button className="popup__save-button" type="submit">
-        Guardar
-      </button>
+export default function NewCard({ onClose }) {
+  const [name, setName] = useState("");
+  const [link, setLink] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    api.addCard({ name, link })
+      .then(() => onClose())
+      .catch(console.error);
+  };
+
+  return (
+    <form className="popup__form" noValidate onSubmit={handleSubmit}>
+      <input
+        className="popup__input"
+        placeholder="Nombre del lugar"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        required
+      />
+      <input
+        className="popup__input"
+        placeholder="URL de la imagen"
+        value={link}
+        onChange={(e) => setLink(e.target.value)}
+        required
+      />
+      <button type="submit" className="button popup__button">Agregar</button>
     </form>
   );
 }

@@ -1,39 +1,29 @@
-export default function EditAvatar() {
+import { useState, useContext } from "react";
+import CurrentUserContext from "../../../contexts/CurrentUserContext";
+
+export default function EditAvatar({ onClose }) {
+  const { currentUser, handleUpdateAvatar } = useContext(CurrentUserContext);
+  const [avatar, setAvatar] = useState(currentUser.avatar || "");
+
+  const handleChange = (e) => setAvatar(e.target.value);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handleUpdateAvatar({ avatar });
+    onClose();
+  };
+
   return (
-    <>
-    <div className="popup popup_type_edit-profile">
-      <div className="popup__container">
-        <button className="popup__close-button" type="button" aria-label="Cerrar">
-          &times;
-        </button>
-        <form className="popup__form" Novalidate>
-          <h2 className="popup__title">Editar perfil</h2>
-
-          <label htmlFor="name" className="popup__label"></label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            placeholder="Nombre"
-            className="popup__input"
-            required
-          />
-          <span className="popup__input-error" id="name-error"></span>
-
-          <label htmlFor="about" className="popup__label"></label>
-          <input
-            type="text"
-            id="about"
-            name="about"
-            placeholder="Sobre mí"
-            className="popup__input"
-            required
-          />
-          <span className="popup__input-error" id="about-error"></span>
-
-          <button type="submit" className="popup__save-button">Guardar</button>
-        </form>
-      </div>
-    </div></>
+    <form className="popup__form" noValidate onSubmit={handleSubmit}>
+      <input
+        type="url"
+        className="popup__input"
+        placeholder="URL del avatar"
+        value={avatar}
+        onChange={handleChange}
+        required
+      />
+      <button type="submit" className="button popup__button">Guardar</button>
+    </form>
   );
 }

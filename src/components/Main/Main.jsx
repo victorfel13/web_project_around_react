@@ -1,31 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import CurrentUserContext from "../../contexts/CurrentUserContext";
+import api from "../utils/api";
+import Card from "../Card/Card";
 import Popup from "./Popup/Popup";
+
+
 import EditProfile from "../Form/EditProfile/EditProfile";
 import EditAvatar from "../Form/EditAvatar/EditAvatar";
 import NewCard from "../Form/NewCard/NewCard";
-import Card from "../Card/Card";
 
 export default function Main() {
+  const { currentUser } = useContext(CurrentUserContext);
+  const [cards, setCards] = useState([]);
   const [popup, setPopup] = useState(null);
 
-  const [cards, setCards] = useState([
-    {
-      isLiked: false,
-      _id: "5d1f0611d321eb4bdcd707dd",
-      name: "Yosemite Valley",
-      link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_yosemite.jpg",
-    },
-    {
-      isLiked: false,
-      _id: "5d1f064ed321eb4bdcd707de",
-      name: "Lake Louise",
-      link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_lake-louise.jpg",
-    },
-  ]);
-
-  // -----------------------------
-  //  POPUP CONTROLLERS
-  // -----------------------------
+  useEffect(() => {
+    api.getInitialCards()
+      .then(setCards)
+      .catch(console.error);
+  }, []);
 
   function handleOpenPopup(popupData) {
     setPopup(popupData);
@@ -34,10 +27,6 @@ export default function Main() {
   function handleClosePopup() {
     setPopup(null);
   }
-
-  // -----------------------------
-  //  PRESETS DE LOS POPUPS
-  // -----------------------------
 
   const editProfilePopup = {
     title: "Editar perfil",
@@ -54,16 +43,14 @@ export default function Main() {
     children: <NewCard onClose={handleClosePopup} />,
   };
 
- 
-  //  CARD 
-
-
-  function handleCardLike(card) {
-    setCards((prevCards) =>
-      prevCards.map((c) =>
-        c._id === card._id ? { ...c, isLiked: !c.isLiked } : c
-      )
-    );
+  async function handleCardLike(card) {
+    const isLiked = card.likes.some((u) => u._id === currentUser._id);
+    try {
+      const newCard = await api.changeLikeCardStatus(card._id, !isLiked);
+      setCards((state) => state.map((c) => (c._id === card._id ? newCard : c)));
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   function handleCardClick(card) {
@@ -73,28 +60,28 @@ export default function Main() {
         <img
           src={card.link}
           alt={card.name}
-          style={{
-            width: "90vw",
-            maxHeight: "80vh",
-            objectFit: "cover",
-            borderRadius: "8px",
-          }}
+          style={{ width: "90vw", maxHeight: "80vh", objectFit: "cover", borderRadius: "8px" }}
         />
       ),
     });
   }
 
-  
-  //  
-  
+  async function handleCardDelete(card) {
+    try {
+      await api.deleteCard(card._id);
+      setCards((state) => state.filter((c) => c._id !== card._id));
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   return (
     <>
       <section className="profile">
         <div className="avatar-container">
           <img
-            src="/images/image.jpg"
-            alt="Foto de perfil de Jacques Cousteau"
+            src={currentUser.avatar || "/images/image.jpg"}
+            alt={`Foto de perfil de ${currentUser.name || "Usuario"}`}
             className="avatar"
           />
           <button
@@ -103,10 +90,9 @@ export default function Main() {
             onClick={() => handleOpenPopup(editAvatarPopup)}
           />
         </div>
-
         <div className="profile__info">
-          <h1 className="profile__name">Jacques</h1>
-          <p className="profile__job">Explorador</p>
+          <h1 className="profile__name">{currentUser.name || "Nombre"}</h1>
+          <p className="profile__job">{currentUser.about || "Descripción"}</p>
           <button
             className="edit-button"
             aria-label="Editar perfil"
@@ -115,7 +101,6 @@ export default function Main() {
             <img src="/images/Pencil.svg" alt="Editar perfil" />
           </button>
         </div>
-
         <button
           className="add-button"
           aria-label="Agregar nueva tarjeta"
@@ -124,23 +109,22 @@ export default function Main() {
           <img src="/images/AddButton.png" alt="Agregar tarjeta" />
         </button>
       </section>
-
       <ul className="cards__list">
-        {cards.map((card) => (
-          <Card
-            key={card._id}
-            card={card}
-            onCardClick={() => handleCardClick(card)}
-            onCardLike={handleCardLike}
-          />
-        ))}
+        {cards.map((card) => {
+          const isLiked = card.likes.some((u) => u._id === currentUser._id);
+          return (
+            <Card
+              key={card._id}
+              card={card}
+              isLiked={isLiked}
+              onCardClick={() => handleCardClick(card)}
+              onCardLike={() => handleCardLike(card)}
+              onCardDelete={() => handleCardDelete(card)}
+            />
+          );
+        })}
       </ul>
-
-      {popup && (
-        <Popup title={popup.title} onClose={handleClosePopup}>
-          {popup.children}
-        </Popup>
-      )}
+      {popup && <Popup title={popup.title} onClose={handleClosePopup}>{popup.children}</Popup>}
     </>
   );
 }

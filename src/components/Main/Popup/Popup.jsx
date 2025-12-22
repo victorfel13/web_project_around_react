@@ -1,35 +1,19 @@
 import React from "react";
-import "../../../blocks/popup.css";
 
-export default function Popup({ onClose, title, children, isImage }) {
+export default function Popup({ title, children, onClose }) {
   return (
     <div className="popup popup_opened">
-      <div
-        className={
-          isImage
-            ? "popup__content_content_image"
-            : "popup__container"
-        }
-      >
-        {/* Botón de cerrar */}
+      <div className="popup__container">
         <button
           className="popup__close-button"
+          type="button"
           aria-label="Cerrar"
           onClick={onClose}
         >
-          ×
+          &times;
         </button>
-
-        {/* Popup normal */}
-        {!isImage && (
-          <>
-            {title && <h2 className="popup__title">{title}</h2>}
-            {children}
-          </>
-        )}
-
-        {/* Popup de imagen */}
-        {isImage && children}
+        {title && <h2 className="popup__title">{title}</h2>}
+        {children}
       </div>
     </div>
   );
