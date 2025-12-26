@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import CurrentUserContext from "../../contexts/CurrentUserContext";
 import Card from "../Card/Card";
-import ImagePopup from "../ImagePopup/ImagePopup";
+import Popup from "../Popup/Popup";
 
 
 import EditProfile from "../Form/EditProfile/EditProfile";
