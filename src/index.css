@@ -1,19 +1,7 @@
-/* index.css */
-
-/* Base */
 @import "./blocks/page.css";
-@import "./blocks/grid.css";
-
-/* Layout */
 @import "./blocks/header.css";
-@import "./blocks/footer.css";
-
-/* Cards */
-@import "./blocks/card.css";
-
-/* Popups */
+@import "./blocks/grid.css";
 @import "./blocks/popup.css";
-@import "./blocks/imagepopup.css";
-
-/* Media queries (siempre al final) */
+@import "./blocks/footer.css";
 @import "./blocks/media.css";
+@import "./blocks/imagepopup.css";
