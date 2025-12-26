@@ -1,12 +1,19 @@
 /* index.css */
 
-/* Importa todos los bloques desde src/blocks */
+/* Base */
 @import "./blocks/page.css";
-@import "./blocks/header.css";
 @import "./blocks/grid.css";
-@import "./blocks/popup.css";
+
+/* Layout */
+@import "./blocks/header.css";
 @import "./blocks/footer.css";
-@import "./blocks/media.css";
+
+/* Cards */
+@import "./blocks/card.css";
+
+/* Popups */
+@import "./blocks/popup.css";
 @import "./blocks/imagepopup.css";
 
-/* aquí van tus estilos propios de index.css */
+/* Media queries (siempre al final) */
+@import "./blocks/media.css";
