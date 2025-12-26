@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Popup({ title, children, onClose }) {
+export default function ImagePopup({ title, children, onClose }) {
   return (
     <div className="popup popup_opened">
       <div className="popup__container">
@@ -12,6 +12,7 @@ export default function Popup({ title, children, onClose }) {
         >
           &times;
         </button>
+
         {title && <h2 className="popup__title">{title}</h2>}
         {children}
       </div>
